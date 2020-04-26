@@ -19,8 +19,10 @@ class StudentManagementApplicationTests {
 	@Test
 	fun greetingShouldReturnDefaultMessage() {
 		restTemplate = TestRestTemplate()
-		val response = restTemplate?.getForObject("http://localhost:"+port+"/get-students", String::class.java)
-		assertEquals("this should pass ", "[{\"name\":\"first-name\",\"age\":20,\"course\":\"BCA\"},{\"name\":\"second-name\",\"age\":21,\"course\":\"BSC\"},{\"name\":\"third-name\",\"age\":22,\"course\":\"MSC\"},{\"name\":\"fourth-name\",\"age\":23,\"course\":\"BCA\"}]", response)
+		val response = restTemplate?.getForEntity("http://localhost:"+port+"/get-students", String::class.java)
+		println("response \n"+response?.statusCode)
+		assertEquals("this should pass ", "[{\"name\":\"first-name\",\"age\":20,\"course\":\"BCA\"},{\"name\":\"second-name\",\"age\":21,\"course\":\"BSC\"},{\"name\":\"third-name\",\"age\":22,\"course\":\"MSC\"},{\"name\":\"fourth-name\",\"age\":23,\"course\":\"BCA\"}]", response?.body)
+		assertEquals("Response code should be 200 ",200, response?.statusCodeValue)
 	}
 
 }
