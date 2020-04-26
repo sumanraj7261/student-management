@@ -1,22 +1,19 @@
 package com.example.studentmanagement
 
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class StudentsTest{
-    var students = Students().getStudents();
+    val mockedStudents = mockk<Students>()
+    val mockedStudent = mockk<Student>()
 
     @Test
     fun shouldReturnAllStudent() {
-        assertEquals(4, students.size)
-    }
+        every{ mockedStudents.getStudents() } returns listOf(mockedStudent)
 
-    @Test
-    fun shouldReturnCorrectDataOfFirstStudent() {
-        val student = students.get(0)
-
-        assertEquals(student.name, "first-name")
+        assertEquals(1, mockedStudents.getStudents().size)
     }
 }
