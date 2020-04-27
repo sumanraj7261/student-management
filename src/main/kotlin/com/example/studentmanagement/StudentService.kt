@@ -1,9 +1,10 @@
 package com.example.studentmanagement
 
-import org.springframework.stereotype.Component
 
-@Component
-class Students {
+import org.springframework.stereotype.Service
+
+@Service
+class StudentService {
     private val student1 = Student("first-name", 20, "BCA");
     private val student2 = Student("second-name", 21, "BSC");
     private val student3 = Student("third-name", 22, "MSC");
