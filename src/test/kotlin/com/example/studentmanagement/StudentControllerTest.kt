@@ -13,10 +13,10 @@ class StudentControllerTest {
 
         every{
             mockStudentService.getStudents()
-        } returns listOf(Student("first", 10, "B"), Student("second", 12, "C"))
+        } returns listOf(mapOf("name" to "someone"))
 
         val result = controller.list();
 
-        Assertions.assertEquals(2, result.body?.size)
+        Assertions.assertEquals(1, result.size)
     }
 }

@@ -1,7 +1,6 @@
 package com.example.studentmanagement
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,8 +10,8 @@ class StudentController(
 ) {
 
     @GetMapping("/students")
-    fun list(): ResponseEntity<List<Student>> {
-        return ResponseEntity.ok(studentService.getStudents())
+    fun list(): List<Map<String, Any>> {
+        return studentService.getStudents()
     }
 
     @PostMapping("/add")

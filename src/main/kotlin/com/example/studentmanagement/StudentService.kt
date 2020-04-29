@@ -4,18 +4,15 @@ package com.example.studentmanagement
 import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
 import org.bson.Document
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class StudentService {
-    private val student1 = Student("first-name", 20, "BCA");
-    private val student2 = Student("second-name", 21, "BSC");
-    private val student3 = Student("third-name", 22, "MSC");
-    private val student4 = Student("fourth-name", 23, "BCA");
-    private val students:List<Student> = listOf(student1, student2, student3, student4)
+class StudentService(
+        @Autowired private val mongoClient: MongoClient
+) {
 
     fun getMongoCollection(): MongoCollection<Document>{
-        val mongoClient = MongoClient("localhost", 27017)
         return  mongoClient.getDatabase("student").getCollection("list")
     }
 
@@ -24,7 +21,10 @@ class StudentService {
         collection.insertOne(org.bson.Document(mapOf("name" to name, "age" to age, "course" to course)))
     }
 
-    fun getStudents(): List<Student> {
-        return students
+    fun getStudents(): List<Map<String, Any>> {
+        val collection = getMongoCollection()
+        val list =  collection.find(org.bson.Document(mapOf()))
+        return list.toList().map { it -> it.minus("_id") }
     }
+
 }
