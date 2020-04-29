@@ -15,8 +15,10 @@ class StudentServiceTest{
         val studentService = StudentService(mockedMongoClient)
 
         every {
-            mockedMongoClient.getDatabase("student").getCollection("list").find(org.bson.Document(mapOf()))
-        } returns FindIterable<Document!>(Document(mapOf("name" to " first-name ")))
+            studentService.getStudents()
+        } returns listOf(mapOf("name" to 1))
+
+        println("student " + studentService.getStudents())
 
         assertEquals(1, studentService.getStudents().size)
     }
