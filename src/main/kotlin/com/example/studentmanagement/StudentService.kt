@@ -18,12 +18,14 @@ class StudentService(
 
     fun addStudent(name: String, age: Int, course: String) {
         val collection = getMongoCollection()
-        collection.insertOne(org.bson.Document(mapOf("name" to name, "age" to age, "course" to course)))
+        val dataToSave = Document(mapOf("name" to name, "age" to age, "course" to course))
+        collection.insertOne(dataToSave)
     }
 
     fun getStudents(): List<Map<String, Any>> {
         val collection = getMongoCollection()
-        val list =  collection.find(org.bson.Document(mapOf()))
+        val query = Document(mapOf())
+        val list =  collection.find(query)
         return list.toList().map { it -> it.minus("_id") }
     }
 

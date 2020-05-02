@@ -1,25 +1,29 @@
 package com.example.studentmanagement
 
 import com.mongodb.MongoClient
-import com.mongodb.async.client.FindIterable
+import com.mongodb.client.MongoCollection
 import io.mockk.*
 import org.bson.Document
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class StudentServiceTest{
-
     @Test
-    fun shouldReturnAllStudent() {
-        val mockedMongoClient = mockk<MongoClient>()
-        val studentService = StudentService(mockedMongoClient)
+    fun `should add one entry of student`() {
+        val mongoClient = mockk<MongoClient>()
+        val mongoCollection = mockk<MongoCollection<Document>>()
+        val studentService = StudentService(mongoClient)
+
+        val documentToSave = Document(mapOf("name" to "dummyName", "age" to 23, "course" to "BSC"))
 
         every {
-            studentService.getStudents()
-        } returns listOf(mapOf("name" to 1))
+            mongoClient.getDatabase("student").getCollection("list")
+        } returns mongoCollection
 
-        println("student " + studentService.getStudents())
+        every {
+            mongoCollection.insertOne(documentToSave)
+        } returns Unit
 
-        assertEquals(1, studentService.getStudents().size)
+        assertEquals(Unit, studentService.addStudent("dummyName", 23, "BSC"))
     }
 }

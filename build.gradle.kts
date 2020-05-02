@@ -28,6 +28,7 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("io.mockk:mockk:1.10.0")
+	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 }
