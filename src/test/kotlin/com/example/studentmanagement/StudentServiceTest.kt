@@ -1,23 +1,23 @@
 package com.example.studentmanagement
 
-import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
 import io.mockk.*
 import org.bson.Document
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.data.mongodb.core.MongoTemplate
 
 class StudentServiceTest{
     @Test
     fun `should add one entry of student`() {
-        val mongoClient = mockk<MongoClient>()
+        val mongoTemplate = mockk<MongoTemplate>()
         val mongoCollection = mockk<MongoCollection<Document>>()
-        val studentService = StudentService(mongoClient)
+        val studentService = StudentService(mongoTemplate)
 
         val documentToSave = Document(mapOf("name" to "dummyName", "age" to 23, "course" to "BSC"))
 
         every {
-            mongoClient.getDatabase("student").getCollection("list")
+            mongoTemplate.db.getCollection("list")
         } returns mongoCollection
 
         every {

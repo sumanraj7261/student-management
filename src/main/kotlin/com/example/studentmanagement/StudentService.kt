@@ -5,15 +5,16 @@ import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
 import org.bson.Document
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
 
 @Service
 class StudentService(
-        @Autowired private val mongoClient: MongoClient
+        @Autowired private val mongoTemplate: MongoTemplate
 ) {
 
     fun getMongoCollection(): MongoCollection<Document>{
-        return  mongoClient.getDatabase("student").getCollection("list")
+        return mongoTemplate.db.getCollection("list")
     }
 
     fun addStudent(name: String, age: Int, course: String) {
