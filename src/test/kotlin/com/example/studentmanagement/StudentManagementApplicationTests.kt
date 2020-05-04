@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.MediaType
 import org.springframework.test.util.AssertionErrors.assertEquals
-
+import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class StudentManagementApplicationTests {
@@ -15,13 +15,14 @@ class StudentManagementApplicationTests {
 	private val port = 0
 
 	@Autowired
-	lateinit var restTemplate: TestRestTemplate
+	lateinit var client: WebTestClient
 
 	@Autowired
 	lateinit var studentRepository: StudentRepository
 
 	@BeforeEach
 	fun initEach() {
+		studentRepository.deleteAll()
 		val student1 = Student("name1", 13, "BSC")
 		val student2 = Student("name2", 19, "B.COM")
 		studentRepository.saveAll(listOf(student1, student2))
@@ -29,9 +30,27 @@ class StudentManagementApplicationTests {
 
 	@Test
 	fun `should return a list of students`() {
-		val response = restTemplate?.getForEntity("http://localhost:"+port+"/students", String::class.java)
-		println("response \n"+response?.statusCode)
-		assertEquals("this should pass ", "[{\"name\":\"name1\",\"age\":13,\"course\":\"BSC\"},{\"name\":\"name2\",\"age\":19,\"course\":\"B.COM\"}]", response?.body)
-		assertEquals("Response code should be 200 ",200, response?.statusCodeValue)
+		val response = client.get()
+				.uri("http://localhost:$port/students")
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().is2xxSuccessful
+				.expectBody(String::class.java)
+				.returnResult().responseBody
+
+		assertEquals("this should pass ", "[{\"name\":\"name1\",\"age\":13,\"course\":\"BSC\"},{\"name\":\"name2\",\"age\":19,\"course\":\"B.COM\"}]", response)
+	}
+
+	@Test
+	fun `should add a student`() {
+		val response = client.post()
+				.uri("http://localhost:$port/add?name=bhawna&age=23&course=bsc")
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().is2xxSuccessful
+				.expectBody(String::class.java)
+				.returnResult().responseBody
+
+		assertEquals("this should pass ", "Entry is successful with name bhawna age 23 and course bsc", response)
 	}
 }
