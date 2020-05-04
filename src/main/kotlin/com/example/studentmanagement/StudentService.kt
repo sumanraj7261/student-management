@@ -16,4 +16,8 @@ class StudentService(
     fun getStudents(): List<Student> {
         return studentRepository.findAll().toList()
     }
+
+    fun findByName(name: String): Student {
+        return studentRepository.findByName(name)
+    }
 }

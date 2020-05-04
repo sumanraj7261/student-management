@@ -31,4 +31,18 @@ class StudentServiceTest{
 
         assertEquals(Unit, studentService.addStudent("name", 23, "BSC"))
     }
+
+    @Test
+    fun `should return a student whose name will be same as in query`() {
+        val mockedStudentRepository = mockk<StudentRepository>()
+        val studentService = StudentService(mockedStudentRepository)
+
+        val student = Student("name", 23, "BSC")
+
+        every {
+            mockedStudentRepository.findByName("name")
+        } returns student
+
+        assertEquals(student, studentService.findByName("name"))
+    }
 }
