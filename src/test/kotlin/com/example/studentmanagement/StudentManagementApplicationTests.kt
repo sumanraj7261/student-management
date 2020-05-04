@@ -1,5 +1,6 @@
 package com.example.studentmanagement
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,15 +15,23 @@ class StudentManagementApplicationTests {
 	private val port = 0
 
 	@Autowired
-	private var restTemplate: TestRestTemplate? = null
+	lateinit var restTemplate: TestRestTemplate
+
+	@Autowired
+	lateinit var studentRepository: StudentRepository
+
+	@BeforeEach
+	fun initEach() {
+		val student1 = Student("name1", 13, "BSC")
+		val student2 = Student("name2", 19, "B.COM")
+		studentRepository.saveAll(listOf(student1, student2))
+	}
 
 	@Test
 	fun `should return a list of students`() {
-		restTemplate = TestRestTemplate()
 		val response = restTemplate?.getForEntity("http://localhost:"+port+"/students", String::class.java)
 		println("response \n"+response?.statusCode)
-		assertEquals("this should pass ", "[{\"name\":\"first-name\",\"age\":20,\"course\":\"BCA\"},{\"name\":\"second-name\",\"age\":21,\"course\":\"BSC\"},{\"name\":\"third-name\",\"age\":22,\"course\":\"MSC\"},{\"name\":\"fourth-name\",\"age\":23,\"course\":\"BCA\"}]", response?.body)
+		assertEquals("this should pass ", "[{\"name\":\"name1\",\"age\":13,\"course\":\"BSC\"},{\"name\":\"name2\",\"age\":19,\"course\":\"B.COM\"}]", response?.body)
 		assertEquals("Response code should be 200 ",200, response?.statusCodeValue)
 	}
-
 }

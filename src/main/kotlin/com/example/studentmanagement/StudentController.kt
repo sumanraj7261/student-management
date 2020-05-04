@@ -10,7 +10,7 @@ class StudentController(
 ) {
 
     @GetMapping("/students")
-    fun list(): List<Map<String, Any>> {
+    fun list(): List<Student> {
         return studentService.getStudents()
     }
 
