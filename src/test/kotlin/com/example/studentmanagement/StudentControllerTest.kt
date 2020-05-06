@@ -1,7 +1,7 @@
 package com.example.studentmanagement
 
 import io.mockk.*
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class StudentControllerTest {
@@ -18,7 +18,7 @@ class StudentControllerTest {
 
         val result = controller.list();
 
-        Assertions.assertEquals(expected, result)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -26,12 +26,14 @@ class StudentControllerTest {
         val mockStudentService = mockk<StudentService>()
         val controller = StudentController(mockStudentService)
 
+        val student = Student("bhawna", 22, "BCA")
+
         every {
             mockStudentService.addStudent("bhawna", 22, "BCA")
-        } returns Unit
+        } returns student
 
         val result = controller.addStudent("bhawna", 22, "BCA")
 
-        Assertions.assertEquals("Entry is successful with name bhawna age 22 and course BCA", result)
+        assertEquals(student, result)
     }
 }

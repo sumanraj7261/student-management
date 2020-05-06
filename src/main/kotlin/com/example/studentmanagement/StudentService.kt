@@ -8,9 +8,9 @@ class StudentService(
         @Autowired private val studentRepository: StudentRepository
 ) {
 
-    fun addStudent(name: String, age: Int, course: String) {
+    fun addStudent(name: String, age: Int, course: String): Student{
         val student = Student(name, age, course)
-        studentRepository.save(student)
+        return studentRepository.save(student)
     }
 
     fun getStudents(): List<Student> {

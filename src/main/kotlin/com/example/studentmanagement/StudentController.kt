@@ -14,9 +14,8 @@ class StudentController(
         return studentService.getStudents()
     }
 
-    @PostMapping("/add")
-    fun addStudent(@RequestParam name: String, @RequestParam age: Int, @RequestParam course: String): String{
-        studentService.addStudent(name, age, course)
-        return "Entry is successful with name $name age $age and course $course"
+    @PostMapping("/student")
+    fun addStudent(@RequestParam name: String, @RequestParam age: Int, @RequestParam course: String): Student{
+       return studentService.addStudent(name, age, course)
     }
 }
