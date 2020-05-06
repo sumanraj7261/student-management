@@ -3,6 +3,7 @@ package com.example.studentmanagement
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import reactor.core.publisher.Mono
 
 class StudentControllerTest {
     @Test
@@ -26,7 +27,7 @@ class StudentControllerTest {
         val mockStudentService = mockk<StudentService>()
         val controller = StudentController(mockStudentService)
 
-        val student = Student("bhawna", 22, "BCA")
+        val student = Mono.just(Student("bhawna", 22, "BCA"))
 
         every {
             mockStudentService.addStudent("bhawna", 22, "BCA")

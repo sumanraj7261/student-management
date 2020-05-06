@@ -1,8 +1,10 @@
 package com.example.studentmanagement
+
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import reactor.test.StepVerifier
 
 class StudentServiceTest{
 
@@ -29,7 +31,12 @@ class StudentServiceTest{
             mockedStudentRepository.save(student)
         } returns student
 
-        assertEquals(Unit, studentService.addStudent("name", 23, "BSC"))
+        StepVerifier
+                .create(studentService.addStudent("name", 23, "BSC"))
+                .expectNext(student)
+                .expectComplete()
+                .verify()
+
     }
 
     @Test
