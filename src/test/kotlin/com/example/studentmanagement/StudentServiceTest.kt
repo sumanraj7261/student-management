@@ -2,23 +2,28 @@ package com.example.studentmanagement
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reactor.test.StepVerifier
 
 class StudentServiceTest{
 
-    @Test
-    fun `should return a list of student's data`() {
-        val mockedStudentRepository = mockk<StudentRepository>()
-        val studentService = StudentService(mockedStudentRepository)
-
-        every {
-            mockedStudentRepository.findAll().iterator().hasNext()  // can I skip defining definition for iterator
-        } returns false
-
-        assertEquals(emptyList<Student>(), studentService.getStudents())
-    }
+//    @Test
+//    fun `should return a list of student's data`() {
+//        val mockedStudentRepository = mockk<StudentRepository>()
+//        val studentService = StudentService(mockedStudentRepository)
+//
+//        every {
+//            mockedStudentRepository.findAll().iterator().hasNext()
+//        } returns false
+//
+//        val expected = Student("name", 21, "BBA")
+//
+//        StepVerifier
+//                .create(studentService.getStudents())
+//                .expectNext()
+//                .expectComplete()
+//                .verify()
+//    }
 
     @Test
     fun `should add one entry of student`() {
@@ -50,6 +55,10 @@ class StudentServiceTest{
             mockedStudentRepository.findByName("name")
         } returns student
 
-        assertEquals(student, studentService.findByName("name"))
+        StepVerifier
+                .create(studentService.findByName("name"))
+                .expectNext(student)
+                .expectComplete()
+                .verify()
     }
 }

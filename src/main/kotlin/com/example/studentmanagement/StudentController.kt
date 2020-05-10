@@ -2,6 +2,7 @@ package com.example.studentmanagement
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
@@ -11,7 +12,7 @@ class StudentController(
 ) {
 
     @GetMapping("/students")
-    fun list(): List<Student> {
+    fun list(): Flux<Student> {
         return studentService.getStudents()
     }
 

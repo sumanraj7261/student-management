@@ -4,6 +4,7 @@ import io.mockk.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toFlux
 
 class StudentControllerTest {
     @Test
@@ -11,7 +12,7 @@ class StudentControllerTest {
         val mockStudentService = mockk<StudentService>()
         val controller = StudentController(mockStudentService)
 
-        val expected = listOf(Student("myname", 10, "BCA"))
+        val expected = listOf(Student("myname", 10, "BCA")).toFlux()
 
         every{
             mockStudentService.getStudents()
