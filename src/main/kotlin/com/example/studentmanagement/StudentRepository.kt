@@ -1,9 +1,10 @@
 package com.example.studentmanagement
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Repository
-interface StudentRepository: CrudRepository<Student, String> {
-    fun findByName(name: String): Student
+interface StudentRepository: ReactiveCrudRepository<Student, String> {
+    fun findByName(name: String): Mono<Student>
 }
