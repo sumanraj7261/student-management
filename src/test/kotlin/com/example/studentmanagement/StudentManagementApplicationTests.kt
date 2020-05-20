@@ -22,10 +22,10 @@ class StudentManagementApplicationTests {
 
 	@BeforeEach
 	fun initEach() {
-		studentRepository.deleteAll()
+		studentRepository.deleteAll().block()
 		val student1 = Student("name1", 13, "BSC")
 		val student2 = Student("name2", 19, "B.COM")
-		studentRepository.saveAll(listOf(student1, student2))
+		studentRepository.saveAll(listOf(student1, student2)).blockLast()
 	}
 
 	@Test
@@ -49,12 +49,14 @@ class StudentManagementApplicationTests {
 				.exchange()
 				.expectStatus().is2xxSuccessful
 				.expectBody(String::class.java)
-				.returnResult().status
+				.returnResult()
 
-		assert(response.is2xxSuccessful)
 
-		val result = studentRepository.findByName("bhawna")
-		assertEquals(result.age, 23 )
-		assertEquals( result.course, "bsc")
+		val result = studentRepository.findByName("bhawna").block()
+
+		assert(response.status.is2xxSuccessful)
+
+		assertEquals("{\"name\":\"bhawna\",\"age\":23,\"course\":\"bsc\"}", response.responseBody)
+		assertEquals(result?.name, "bhawna")
 	}
 }

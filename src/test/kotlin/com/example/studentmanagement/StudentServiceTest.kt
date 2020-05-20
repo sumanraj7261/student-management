@@ -3,27 +3,29 @@ package com.example.studentmanagement
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 
 class StudentServiceTest{
 
-//    @Test
-//    fun `should return a list of student's data`() {
-//        val mockedStudentRepository = mockk<StudentRepository>()
-//        val studentService = StudentService(mockedStudentRepository)
-//
-//        every {
-//            mockedStudentRepository.findAll().iterator().hasNext()
-//        } returns false
-//
-//        val expected = Student("name", 21, "BBA")
-//
-//        StepVerifier
-//                .create(studentService.getStudents())
-//                .expectNext()
-//                .expectComplete()
-//                .verify()
-//    }
+    @Test
+    fun `should return a list of student's data`() {
+        val mockedStudentRepository = mockk<StudentRepository>()
+        val studentService = StudentService(mockedStudentRepository)
+
+        val expected = Student("name", 21, "BBA")
+
+        every {
+            mockedStudentRepository.findAll()
+        } returns Flux.just(expected)
+
+        StepVerifier
+                .create(studentService.getStudents())
+                .expectNext(expected)
+                .expectComplete()
+                .verify()
+    }
 
     @Test
     fun `should add one entry of student`() {
@@ -34,7 +36,7 @@ class StudentServiceTest{
 
         every {
             mockedStudentRepository.save(student)
-        } returns student
+        } returns  Mono.just(student)
 
         StepVerifier
                 .create(studentService.addStudent("name", 23, "BSC"))
@@ -53,7 +55,7 @@ class StudentServiceTest{
 
         every {
             mockedStudentRepository.findByName("name")
-        } returns student
+        } returns Mono.just(student)
 
         StepVerifier
                 .create(studentService.findByName("name"))
