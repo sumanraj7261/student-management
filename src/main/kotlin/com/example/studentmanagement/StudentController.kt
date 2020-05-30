@@ -16,9 +16,14 @@ class StudentController(
         return studentService.getStudents()
     }
 
+     @GetMapping("/")
+    fun greet(): String {
+        return "Welcome in student's world" 
+    }
+
     @PostMapping("/student")
     fun addStudent(@RequestParam name: String, @RequestParam age: Int, @RequestParam course: String): Mono<Student>{
        return studentService.addStudent(name, age, course)
     }
-    
+
 }
