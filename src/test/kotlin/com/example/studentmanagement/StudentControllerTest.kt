@@ -1,6 +1,7 @@
 package com.example.studentmanagement
 
 import io.mockk.*
+import org.apache.kafka.clients.admin.NewTopic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.kafka.core.KafkaTemplate
@@ -14,7 +15,7 @@ class StudentControllerTest {
         val mockStudentService = mockk<StudentService>()
         val mockKafkaTemplate = mockk<KafkaTemplate<String, String>>()
         val mockKafkaRepository = mockk<KafkaRepository>()
-        val controller = StudentController(mockStudentService, mockKafkaTemplate,"test", mockKafkaRepository)
+        val controller = StudentController(mockStudentService, mockKafkaTemplate, NewTopic("test", 1,1), mockKafkaRepository)
 
         val expected = listOf(Student("myname", 10, "BCA")).toFlux()
 
@@ -31,7 +32,7 @@ class StudentControllerTest {
         val mockKafkaTemplate = mockk<KafkaTemplate<String, String>>()
         val mockKafkaRepository = mockk<KafkaRepository>()
         val mockStudentService = mockk<StudentService>()
-        val controller = StudentController(mockStudentService, mockKafkaTemplate,"test", mockKafkaRepository)
+        val controller = StudentController(mockStudentService, mockKafkaTemplate, NewTopic("test", 1,1), mockKafkaRepository)
 
         val student = Mono.just(Student("bhawna", 22, "BCA"))
 

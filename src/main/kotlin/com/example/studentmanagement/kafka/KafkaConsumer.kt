@@ -14,7 +14,7 @@ class KafkaService(
     @KafkaListener(topics = ["\${topic}"], groupId = "foo")
     fun listen(message: String) {
         kafkaRepository.save(Kafka(message)).block()
-        println("Received Messasge in group foo: $message")
+        println("Student Management ---------------------> Received Messasge in group foo: $message")
     }
 }
 

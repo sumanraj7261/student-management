@@ -1,6 +1,7 @@
 package com.example.studentmanagement
 
 import com.example.studentmanagement.kafka.Kafka
+import org.apache.kafka.clients.admin.NewTopic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
@@ -17,8 +18,8 @@ class StudentController(
         private val studentService : StudentService,
         @Autowired
         private val kafkaTemplate: KafkaTemplate<String, String>,
-        @Value("\${topic}")
-        private val topic: String,
+        @Autowired
+        private val topic1: NewTopic,
         @Autowired
         private val kafkaRepository: KafkaRepository
 ) {
@@ -41,7 +42,7 @@ class StudentController(
     @PostMapping("/student")
     fun addStudent(@RequestParam name: String, @RequestParam age: Int, @RequestParam course: String): Mono<Student>{
         val msg = "New Entry $name $age $course"
-        kafkaTemplate.send(topic, msg)
+        kafkaTemplate.send(topic1.name(), msg)
         return studentService.addStudent(name, age, course)
     }
 
