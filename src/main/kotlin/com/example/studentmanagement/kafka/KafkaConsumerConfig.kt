@@ -16,7 +16,9 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 @Configuration
 class KafkaConsumerConfig(
         @Value("\${kafka.bootstrapAddress}")
-        private val bootstrapAddress: String
+        private val bootstrapAddress: String,
+        @Value("\${spring.kafka.consumer.auto-offset-reset}")
+        private val offset: String
 ) {
 
     private val groupId = "foo"
@@ -28,6 +30,7 @@ class KafkaConsumerConfig(
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = offset
         return DefaultKafkaConsumerFactory(props)
     }
 
